@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="es">
+
+	<head>
+		<meta charset="utf-8"/>
+		<title> Ejercicio10 </title>
+		<script src="jquery-3.1.1.slim.min.js"></script>
+		<script> 
+			$(document).ready(function(){
+				$("#foto_34").mousemove(function(e){
+					$("#informacion").text(e.pageX + "," + e.pageY);
+				}); 
+				
+				 $("#foto_34").mouseleave(function(){
+					$("#informacion").empty();
+				}); 
+			});
+
+		</script>
+		
+		<style>
+
+		</style>
+	</head>
+
+	<body>
+		 <img src="img1.jpg" id="foto_34" alt="Smiley face" height="318" width="435"> 
+		 <p id="informacion"> </p>
+	</body>
+
+</html>

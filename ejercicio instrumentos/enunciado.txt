@@ -1,0 +1,9 @@
+Botón quitar/poner , plegar/desplegar piano y guitarra
+
+Select con las notas músicales, la que esté seleccionada es que que se quitará o pondrá.
+
+Debajo irán apareciendo todas las notas que se vallan pulsando.
+
+El botón plegar hace una animación de los div subiéndose o bajándose. 
+
+El botón piano cambia los colores de los div a negro blanco con los impares y pares.

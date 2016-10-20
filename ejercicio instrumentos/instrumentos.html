@@ -8,12 +8,12 @@
 		<script> 
 			$(document).ready(function(){
 				
-					$("#do").addClass("do");
-					$("#re").addClass("re");
-					$("#mi").addClass("mi");
+					$("#do").addClass("do notas");
+					$("#re").addClass("re notas");
+					$("#mi").addClass("mi notas");
 				
 				
-				$("div").hover(function(){
+				$(".notas").hover(function(){
 					$(this).animate({
 						opacity: '0.5',
 						height: '150px',
@@ -21,14 +21,30 @@
 					},"fast");
 				});
 				
-				$("div").mouseleave(function(){
+				$(".notas").mouseleave(function(){
 					$(this).animate({
 						opacity: '1',
 						height: '100px',
 						width: '100px'
 					});
+					var nota = $(this).text();
+					$("#notasM").append(nota);
 				});
 				
+				$("#btnQuitaPon").click(function(){
+					var notaMusical = $("#listaNotas option:selected").val();
+					$("#" + notaMusical).toggle();
+				});
+				
+				$("#plega").click(function(){
+					$(".notas").slideToggle("slow");
+				});
+				
+				$("#piano").click(function(){
+					$(".notas:even").css("background-color", "white");
+					$(".notas:odd").css("background-color", "black");
+					$(".notas:odd").css("color", "white");
+				});
 				
 			});
 
@@ -59,13 +75,42 @@
 				float: left;
 				border: 1px solid black;
 			}
+			
+			#notasM{
+				position: absolute;
+				top: 240px;
+			}
+			
+			#botones{
+				position: absolute;
+				top: 200px;
+			}
+			
 		</style>
 	</head>
 
 	<body>
-		<div id="do">Do</div>
-		<div id="re">Re</div>
-		<div id="mi">Mi</div>
+		<table>
+			<tr>
+				<td id="do">Do</td>
+				<td id="re">Re</td>
+				<td id="mi">Mi</td>
+			</tr>
+		</table>
+		
+		<div id="botones">
+			<select name="listaNotas" id="listaNotas">
+			  <option value="do">do</option>
+			  <option value="re">re</option>
+			  <option value="mi">mi</option>
+			</select>
+			<button type="button" id="btnQuitaPon">Quitar/Poner</button>
+			<button type="button" id="plega">Plegar</button>
+			<button type="button" id="piano">Piano</button>
+			
+		</div>
+		<div id="notasM"></div> 
+
 	</body>
 
 </html>

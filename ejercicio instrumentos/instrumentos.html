@@ -37,7 +37,6 @@
 				});
 				
 				$("#plega").click(function(){
-					
 					if($(this).text()=="Plegar"){
 						$(".notas:visible").slideToggle("slow");
 						$(this).text("Desplega"); 
@@ -48,9 +47,19 @@
 				});
 				
 				$("#piano").click(function(){
-					$(".notas:even").css("background-color", "white");
-					$(".notas:odd").css("background-color", "black");
-					$(".notas:odd").css("color", "white");
+					if($(this).text()=="Piano"){
+						$(".notas:even").css("background-color", "white");
+						$(".notas:odd").css("background-color", "black");
+						$(".notas:odd").css("color", "white");
+						$(this).text("Xilofono"); 
+					} else  {
+						$("#do").css("background-color", "red");
+						$("#re").css("background-color", "orange");
+						$("#mi").css("background-color", "yellow");
+						$(".notas:odd").css("color", "black");
+						$(this).text("Piano");
+					}
+					
 				});
 				
 				$("#guitarra").click(function () {

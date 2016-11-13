@@ -1,0 +1,169 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>stop demo</title>
+  <style>
+
+  
+.coches{
+	width:80px;
+	height:80px;
+	position:absolute;
+    top: 240px;	
+	left:10px;
+	background-repeat:no-repeat;
+	background-image:url(car1.png);
+} 
+
+#cielo{
+position:absolute;
+width:100%;
+height:180px;
+background-image: url("nube.jpg");
+background-repeat:repeat;
+
+}
+
+.bolita{
+ width:50px;
+ height:50px;
+ position:absolute;
+ top:250px;
+ left:1300px;
+ background-image: url("bola.jpg");
+ background-size:50px 50px;
+
+}
+
+
+
+  </style>
+  
+  <script src="jquery-2.1.4.min.js"></script>
+   
+<script>
+
+
+	
+	var cuentaNube=1; 
+	var cuentaBola=1; 
+	var poslef=100;
+	var posIz=1000;
+	var contador=1;//Es de la funcion confirmar 
+	
+$(document).ready(function(){	
+$("body").keydown(function(e) {
+
+	
+    switch((e.keyCode ? e.keyCode : e.which)){
+        //case 13: // Enter
+        //case 27: // Esc
+        case 32: // Space
+		//Jump
+		$("#block").animate({top: "-=50"},500);
+		$("#block").animate({top: "+=50"},500);		
+		break;
+        case 37:   // Left Arrow
+            $("#block").animate({left: "-=10"},1);
+        break;
+       /* case 38: // Up Arrow
+		$("#block").animate({top: "-=10"},1);
+		break;*/
+        case 39:   // Right Arrow
+            $("#block").animate({left: "+=10"},1);
+        break;
+        /*case 40: // Down Arrow
+			$("#block").animate({top: "+=10"},1);
+		break;*/
+    }
+	});
+	
+	//------------Funcion de mover el cielo------------------------//
+	  moverCielo();
+
+	  function moverCielo(){
+	    $("#cielo").animate({backgroundPosition: "-=10"},40, moverCielo);
+            
+	  
+	  }
+	  
+	//-----------------Creo la bola-------------------------------//  
+	   crearBola();
+	  function crearBola(){
+	         contador=1;
+	         posIz=1300;
+	//----------Creo las bolas--------------//
+			   
+			     var idBola="bola".concat(cuentaBola);
+			     var bolas = $('<div class="bolita" id="'+ idBola+ '"></div>');
+				 $("#contenedor").append(bolas);
+				 
+		
+//-----------------------Repito el intervalo para comprobar si las posiciones son iguales del carro y la bola --------------------//	     
+		      while(posIz >1){
+			    
+		         posIz= (posIz - 10);
+				 //console.log("Entro");
+				
+				 $("#" + idBola).animate({left: posIz + 'px' , top: 250+'px'},50,esta);             
+				 
+			   }
+				
+	    }
+//----------------La logica (entra cada vez que la animacion termina para comprobar) -----------------------------//
+	    function esta(){
+
+		 var poscoche= $("#block").position();// Almaceno la posicion del carro-
+		 var posbola= $(this).position();// Almaceno la posicion del de la bola
+		
+		  console.log(posbola.left + "--Ç " +  poscoche.left );
+		 
+//-------------Cuando la pelota llega al final se borra la capa-----------------------//
+             if((poscoche.top >=240) &&(posbola.left == poscoche.left)){
+			   
+			     alert("game over");
+				  $("#contenedor").stop();
+			   $(this).remove();
+			   
+			  }else if(contador>=130){
+			  $(this).remove();
+			   crearBola();//llamo la funcion 
+			 }
+			 contador++;//Cuento las veces que que animacion llama a la funcion 
+			
+			
+               
+   			}	
+
+			
+//----------Genera un el semaforo aleatoriamente ---------------------------//			
+			
+			
+//----------Genera un un numero aleatorio---------------------------//			
+			  
+	  function getRand(min, max) {
+		
+				return Math.random() * (max - min) + min;
+	   }
+  
+	  
+
+    });//Cierra el document ready
+	
+	
+</script>
+ 
+</head>
+<body>
+
+<div id="contenedor">
+	<div id="cielo"></div>
+	<div id="block" class="coches"></div>
+	
+
+	
+	
+</div>
+</body>
+</html>

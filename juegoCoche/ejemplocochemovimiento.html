@@ -1,0 +1,232 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<title>stop demo</title>
+		<style>
+		.coches{
+			width:64px;
+			height:38px;
+			position:absolute;	
+			background-repeat:no-repeat;
+			background-image:url(car1.png);
+			top: 277px;
+		}
+
+		#cielo{
+			width: 1340px;
+			height: 198px;
+			background-image: url(nube01.jpg);
+			background-size: 229px;
+		}
+		
+		#carretera{
+			width: 1340px;
+			height: 200px;
+			background-image: url(carretera.png);
+			background-size: 229px;
+			background-repeat:repeat-x;
+		}
+		
+		.bola{
+			width: 60px;
+			height:45px;
+			position:absolute;
+			background-image: url(esfera.png);
+			background-repeat:no-repeat;
+			background-size: 60px;
+			top: 277px;
+		}
+		
+		.semaforo{
+			width: 150px;
+			height: 175px;
+			position:absolute;
+			background-image: url(semaforo.png);
+			background-repeat:no-repeat;
+			background-size: 60px;
+			top: 250px;
+		}
+		
+		#texto{
+			text-align:center;
+		}
+
+		</style>
+		<script src="js/jquery-3.1.1.min.js"></script>
+		<script>
+			$(document).ready(function() {
+				var posicionFinal = 1280;
+				moverCielo();
+				
+				var play = setInterval(crearBolas, getRand(2000,6000));
+				
+				var semaforo = setInterval(crearSemaforo, getRand(2200,4000));
+				
+				var colision = setInterval(comprobarColision, 100);
+				
+				function comprobarColision(){
+					var posCoche = $("#block").position().left;
+					var posDechaCoche = posCoche + $("#block").width();
+					var posAltoCoche = Math.floor($("#block").position().top);
+					var posBajoCoche = posAltoCoche + $("#block").height();
+					console.log("posicion coche " + posCoche);
+					
+					// Colisión con bolas
+					$( ".bola" ).each(function( index ) {
+						var  posBola = Math.floor($(this).position().left);
+					   //posActual = $(this).css("backgroundPosition");
+					    console.log("Posicion bola" + index + ": " + posBola);
+						var posDechaBola = posBola + $(this).width();
+						var posAltoBola = Math.floor($(this).position().top);
+						var posBajoBola = posAltoBola + $(this).height();
+						console.log("top: "  + posAltoBola +"alto: " + posBajoBola);
+					  if(((posBola >= posCoche && posBola <= posDechaCoche) || (posDechaBola >= posCoche && posDechaBola <= posDechaCoche)) && 
+					  ((posAltoBola >= posAltoCoche && posAltoBola <= posBajoCoche)|| (posBajoBola >= posAltoCoche && posBajoBola <= posBajoCoche))){
+					   /*console.log("Posicion bola" + index + ": " + posBola);
+					   console.log("Posicion bola D" + index + ": " + posDechaBola);
+					   console.log("Posicion bola A" + index + ": " + posAltoBola);
+					   console.log("Posicion bola B" + index + ": " + posBajoBola);
+					   console.log("Posicion coche " + index + ": " + posCoche);
+					   console.log("Posicion coche D" + index + ": " + posDechaCoche);
+					   console.log("Posicion coche A" + index + ": " + posAltoCoche);
+					   console.log("Posicion coche B" + index + ": " + posBajoCoche);*/
+						$("#texto").html("<h1>PUMMM!! Has chocado con la bola <h1>");
+						clearInterval(play);
+						clearInterval(colision);
+						clearInterval(semaforo);
+						$( "#cielo" ).stop(true, true);
+						$( ".bola" ).stop(true, true);
+					  }
+					});
+					
+					//colision con semaforo
+					
+					$( ".semaforo" ).each(function( index ) {
+						var  posSemaforo = Math.floor($(this).position().left);
+					   //posActual = $(this).css("backgroundPosition");
+					    console.log("Posicion Semaforo" + index + ": " + posSemaforo);
+						var posDechaSemaforo = posSemaforo + $(this).width();
+						var posAltoSemaforo = Math.floor($(this).position().top);
+						var posBajoSemaforo = posAltoSemaforo + $(this).height();
+	
+					   console.log("Posicion bola" + index + ": " + posSemaforo);
+					   console.log("Posicion bola D" + index + ": " + posDechaSemaforo);
+					   console.log("Posicion bola A" + index + ": " + posAltoSemaforo);
+					   console.log("Posicion bola B" + index + ": " + posBajoSemaforo);
+					   console.log("Posicion coche " + index + ": " + posCoche);
+					   console.log("Posicion coche D" + index + ": " + posDechaCoche);
+					   console.log("Posicion coche A" + index + ": " + posAltoCoche);
+					   console.log("Posicion coche B" + index + ": " + posBajoCoche);
+					   
+					  if(((posSemaforo >= posCoche && posSemaforo <= posDechaCoche) || (posDechaSemaforo >= posCoche && posDechaSemaforo <= posDechaCoche))){
+					 /*  console.log("Posicion bola" + index + ": " + posBola);
+					   console.log("Posicion bola D" + index + ": " + posDechaBola);
+					   console.log("Posicion bola A" + index + ": " + posAltoBola);
+					   console.log("Posicion bola B" + index + ": " + posBajoBola);
+					   console.log("Posicion coche " + index + ": " + posCoche);
+					   console.log("Posicion coche D" + index + ": " + posDechaCoche);
+					   console.log("Posicion coche A" + index + ": " + posAltoCoche);
+					   console.log("Posicion coche B" + index + ": " + posBajoCoche);*/
+						$("#texto").html("<h1>PUMMM!! Has chocado con el semáforo <h1>");
+						clearInterval(play);
+						clearInterval(colision);
+						clearInterval(semaforo);
+						$( ".bola" ).stop(true, true);
+					  }
+					});
+
+				    if (posCoche >= 1250){
+						$("#texto").html("<h2>Has ganado<h2>");
+					 // alert("Has ganado");
+					  clearInterval(play);
+					  clearInterval(colision);
+					  clearInterval(semaforo);
+					  $( ".bola" ).stop(true, true);
+				    }
+				}
+				
+				function moverCielo(){
+					$("#cielo").animate({backgroundPosition: "-=2"},60,moverCielo);
+				}
+				
+				function crearBolas(){
+					var bola = $("<div></div>") 
+								.addClass("bola");
+					//bola.css("backgroundPosition","1200px");
+						bola.css("left","1200px");
+					$("div#carretera").append(bola);
+					moverBolas();
+				}
+				
+				function crearSemaforo(){
+				
+					if ($(".semaforo").length) {
+						$(".semaforo").remove();
+					} else {
+						var semaforo = $("<div></div>") 
+								.addClass("semaforo");
+						//bola.css("backgroundPosition","1200px");
+						var posCoche = $("#block").position().left;
+						var posDechaCoche = posCoche + $("#block").width();
+							semaforo.css("left",getRand(posDechaCoche+50,1200) + "px");
+						$("div#carretera").append(semaforo);
+					}
+					
+					
+				}
+
+				function moverBolas(){
+					$(".bola").animate({left: '-100px'},3000,function(){
+						$(this).remove();
+						console.log("bola eliminada");
+					});
+					
+				}
+				
+				function getRand(min, max) { 
+					return Math.floor(Math.random() * (max - min + 1)) + min;
+				}
+			});
+			
+		</script>
+	</head>
+	<body>
+	<div id="cielo"></div>
+	<div id="block" class="coches"></div>
+	<div id="carretera">
+		<!--<div class="semaforo"> </div>-->
+	</div>
+	<div id="texto"></div>
+	<script>
+	$("body").keydown(function(e) {
+			
+			switch((e.keyCode ? e.keyCode : e.which)){
+				//case 13: // Enter
+				//case 27: // Esc
+				case 32: // Space
+				//Jump
+				$("#block").animate({top: "-=120"},600);
+				$("#block").animate({top: "+=120"},600);		
+				break;
+				case 37:   // Left Arrow
+				//	$("#block").animate({left: "-=10"},1);
+				break;
+				case 38: // Up Arrow
+				//$("#block").animate({top: "-=10"},1);
+				break;
+				case 39:   // Right Arrow
+					if($("#block").position().left<= 1280){
+						$("#block").animate({left: "+=10"},1);
+					}
+					
+				break;
+				case 40: // Down Arrow
+				//	$("#block").animate({top: "+=10"},1);
+				break;
+		}
+	});
+	</script>
+ 
+</body>
+</html>

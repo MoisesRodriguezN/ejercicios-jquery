@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>Examen jQuery Moisés Rodríguez</title>
+		<script src="jquery-3.1.1.min.js"></script>
+		<style>
+			#cielo{
+				width: 796px;
+				height: 240px;
+				background-color: DeepSkyBlue;
+			}
+			
+			#contenedor{
+				width: 796px;
+				float: left;
+				border: 2px solid black;
+			}
+			
+			#escenario{
+				width: 796px;
+				height: 400px;
+			}
+			
+			img#playa{
+				width: 796px;
+				height: 400px;
+				
+			}
+			
+			img#campo{
+				width: 796px;
+				height: 400px;
+			}
+			#panel{
+				width: 200px;
+				height: 640px;
+				border: 1px solid black;
+				display: inline-block;
+			}
+			
+			.nube{
+				width: 150px;
+				height: 79px;
+				position:absolute;
+				background-image: url(img/cloud.png);
+				background-repeat:no-repeat;
+				background-size: 150px;
+			}
+			
+			#viento{
+				width: 75px;
+				height: 64px;
+				position:absolute;
+				background-image: url(img/windbtn.png);
+				background-repeat:no-repeat;
+				background-size: 75px;
+			}
+			
+			#sol{
+				width: 75px;
+				height: 75px;
+				position:absolute;
+				background-image: url(img/sun.png);
+				background-repeat:no-repeat;
+				background-size: 75px;
+			}
+			
+			.tractor{
+				width: 150px;
+				height: 100px;
+				position:absolute;
+				background-image: url(img/tractor.png);
+				background-repeat:no-repeat;
+				background-size: 150px;
+			}
+			
+			.barco{
+				width: 150px;
+				height: 170px;
+				position:absolute;
+				background-image: url(img/boat.png);
+				background-repeat:no-repeat;
+				background-size: 170px;
+			}
+			
+			.iconos{
+				width: 75px;
+				height: 75px;
+			}
+		</style>
+		<script>
+			$(document).ready(function() {
+				var cuentaNubes = 0;
+				var vientoCreado = false;
+				var hayViento = false;
+				var solCreado = false;
+				var haySol = false;
+				var playaCreada = false;
+				var cuentaTransporte = 0;
+				$("#barcoBtn").hide(1);
+				//cambia color de fondo
+				$("input").change(function(){ 
+					var color = $("input").val();
+					console.log(color);
+					$( "#cielo" ).css("backgroundColor",color);
+				});	
+				//Creo las nubes y las coloco en posiciones aleatorias dentro de la capa cielo.
+				$("#nubeBtn").click(function(){ 
+					var nube = $("<div></div>")
+					.addClass("nube");
+					nube.css("left", getRand(50, 650) +"px");
+					nube.css("top", getRand(10, 170) +"px");
+					$("div#cielo").append(nube);
+					cuentaNubes = $(".nube").length;
+					$("#numNubes").text(cuentaNubes);
+					if(hayViento){	//Si hay viento llama a la función mueve nubes para que mueva las nuevas nubes creadas
+						mueveNubes();
+					}
+					if(haySol){
+						desapareceNubes();
+					}
+				});
+				
+				//Crea o quita el viento (On off)
+				$("#vientoBtn").click(function(){ 
+					if (!vientoCreado){
+						var viento = $("<div></div>")
+						viento.attr("id","viento");
+						viento.css("left", 30 +"px");
+						viento.css("top", 60 +"px");
+						$("div#cielo").append(viento);
+						vientoCreado = true;
+						hayViento = true;
+						mueveNubes();
+					}else{
+						$("#viento").remove();
+						vientoCreado = false;
+						hayViento = false;
+						$(".nube").stop(true);
+						
+					}	
+				});	
+				
+				function mueveNubes(){ //Animación del movimiento de las nubes
+					$(".nube").each(function(){ 
+						$(this).animate({
+							left: '650px'
+						},4000);
+					}); 
+				}
+				
+				//Crea el sol o quita el sol
+				$("#solBtn").click(function(){ 
+					if (!solCreado){
+						var sol = $("<div></div>")
+						sol.attr("id","sol");
+						sol.css("left", 30 +"px");
+						sol.css("top", 60 +"px");
+						$("div#cielo").append(sol);
+						solCreado = true;
+						haySol = true;
+						desapareceNubes();
+					}else{
+						$("#sol").remove();
+						solCreado = false;
+						haySol = false;
+						$(".nube").stop(true);
+						
+					}
+				});
+				
+				function desapareceNubes(){ //Animación del movimiento de las nubes
+					$(".nube").each(function(){ 
+						$(this).animate({opacity: '0'}, 2500, function(){
+							(this).remove();
+							cuentaNubes = $(".nube").length;
+							$("#numNubes").text(cuentaNubes);
+						});
+					}); 
+				}
+				
+				//Cambia a playa
+				$("#playaBtn").click(function(){ 
+					cuentaTransporte = $(".barco").length;
+					$("#numTransporte").text(cuentaTransporte);
+					if(!playaCreada){
+						$(".tractor").stop(true);
+						$(".tractor").hide(1500,function(){
+							$(".tractor").remove();
+						}); 
+						$("#barcoBtn").show(1);
+						$("div#escenario img").remove();
+						$("#tractorBtn").hide(1);
+						var playa = $("<img src='img/sea.png'></img>");
+						$("div#escenario").append(playa);
+						playaCreada=true;
+					}
+				});	
+				//Cambia a campo
+				$("#campoBtn").click(function(){ 
+					cuentaTransporte = $(".tractor").length;
+					$("#numTransporte").text(cuentaTransporte);
+					$(".barco").stop(true);
+					$(".barco").hide(1500,function(){
+							$(".barco").remove();
+						});
+					$("div#escenario img").remove();
+					$("#tractorBtn").show(1);
+					$("#barcoBtn").hide(1);
+					var campo = $("<img src='img/field.jpg'></img>");
+					$("div#escenario").append(campo);
+					playaCreada = false;
+				});
+				
+				//Crea tractores y los mueve
+				$("img#tractorBtn").click(function(){ 
+					cuentaTransporte = $(".tractor").length;
+					$("#numTransporte").text(cuentaTransporte);
+					var tractorCreado = $("<div></div>")
+						tractorCreado.addClass("tractor");
+						tractorCreado.css("left", 640 +"px");
+						tractorCreado.css("top", getRand(257, 540) +"px");
+						$("#escenario").append(tractorCreado);
+						var velocidad = getRand(1000, 4000);
+						mueveTractor();
+					function mueveTractor(){
+						$(tractorCreado).animate({
+								left: '10px'
+						},velocidad,function(){
+							$(tractorCreado).animate({left: '650px'},velocidad,mueveTractor());
+						});
+					}
+				});
+				
+				//Crea barcos y los mueve
+				$("#barcoBtn").click(function(){
+					cuentaTransporte = $(".barco").length;
+					$("#numTransporte").text(cuentaTransporte);
+					var mueveBarcoCreado = $("<div></div>")
+						mueveBarcoCreado.addClass("barco");
+						mueveBarcoCreado.css("left", 640 +"px");
+						mueveBarcoCreado.css("top", getRand(257, 540) +"px");
+						$("#escenario").append(mueveBarcoCreado);
+						var velocidad = getRand(1000, 4000);
+						mueveBarco();
+					function mueveBarco(){
+						$(mueveBarcoCreado).animate({
+								left: '10px'
+						},velocidad,function(){
+							$(mueveBarcoCreado).animate({left: '650px'},velocidad,mueveBarco());
+						});
+					}
+				});
+				
+				
+				function getRand(min, max) { //Función que genera números aleatorios
+					return Math.floor(Math.random() * (max - min + 1)) + min;
+				}
+			}); //Ready
+		</script>
+	</head>
+	<body>
+		<div id="panel">
+			 Color del cielo <input type="color" name="colorCielo" value="#ff0000">
+			 <img src="img/cloudbtn.png" id="nubeBtn" class="iconos"> <span>Nubes:</span> <span id="numNubes">0</span>
+			 <hr>
+			 <img src="img/windbtn.png" id="vientoBtn" class="iconos">
+			 <img src="img/sun.png" id="solBtn" class="iconos">
+			 <hr>
+			 <img src="img/seaBtn.png" id="playaBtn" class="iconos">
+			 <img src="img/fieldbtn.png" id="campoBtn" class="iconos">
+			 <img src="img/tractorbtn.png" id="tractorBtn" class="iconos"> 
+			 <img src="img/boatbtn.png" id="barcoBtn" class="iconos"> 
+			 <span>transporte:</span>
+			 <span id="numTransporte">0</span>
+		</div>
+		</div>
+		<div id="contenedor">
+			<div id="cielo"></div>
+			<div id="escenario">
+				<img id="campo" src="img/field.jpg">
+			</div>
+		</div>
+		
+		
+	</body>
+</html> 
